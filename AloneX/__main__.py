@@ -9,8 +9,8 @@ from aiohttp import web
 from telegram import Update
 from telegram.ext import Application
 from AloneX import (
-    TOKEN, app, plugins, SUPPORT_CHAT, LOGS_CHANNEL, 
-    IS_WEB_SUP, initialize_database, start_all_clients, 
+    TOKEN, app, plugins, SUPPORT_CHAT, LOGS_CHANNEL,
+    IS_WEB_SUP, initialize_database, start_all_clients,
     BIND_ADDRESS, PORT, pbot, tbot, user, MODULE
 )
 
@@ -36,7 +36,6 @@ def import_plugins(package):
         logging.debug(f"Importing module: {full_name}")
         module = importlib.import_module(full_name)
 
-        # Register help
         help_text = getattr(module, "__help__", None) or getattr(module, "HELP", None) or getattr(module, "__HELP__", None)
         mod_name = getattr(module, "__module__", None) or getattr(module, "__mod_name__", None) or getattr(module, "__MODULE__", None)
 
@@ -54,7 +53,7 @@ async def start_services():
     await web.TCPSite(server, BIND_ADDRESS, PORT).start()
     logging.info("Web Server Initialized Successfully")
     logging.info("=========== Service Startup Complete ===========")
-  
+
     asyncio.create_task(keep_alive())
     logging.info("Keep Alive Service Started")
     logging.info("=========== Initializing Web Server ===========")
@@ -62,17 +61,21 @@ async def start_services():
 
 if __name__ == '__main__':
     import_plugins(plugins)
-    
+
     async_funcs = [
         start_all_clients(),
         initialize_database()
     ]
-    
+
+    if os.getenv("MUSIC_ENABLED", "True").lower() == "true":
+        from AloneXMusic.__main__ import start_music_services
+        async_funcs.append(start_music_services())
+
     if IS_WEB_SUP:
         async_funcs.append(start_services())
-        
+
     loop = asyncio.get_event_loop()
     loop.run_until_complete(asyncio.gather(*async_funcs))
-    
+
     logging.info("Starting PTB Application...")
     app.run_polling(drop_pending_updates=True, allowed_updates=Update.ALL_TYPES)
