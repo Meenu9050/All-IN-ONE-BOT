@@ -22,8 +22,8 @@ if not TOKEN or not DB_URL:
     print("❌ ERROR: 'TOKEN' and 'DB_URL' environment variables are required.")
     exit(1)
 
-BOT_ID: int = int(TOKEN.split(':')[0])
-API_ID: int = int(getenv('API_ID', '0'))
+BOT_ID: int = int(TOKEN.split(':')[7636010059:AAGN0g5d-w5FzI6BTJyMR7W-VOHuXwxOkE0)
+API_ID: int = int(getenv('API_ID', '27263782'))
 API_HASH: str = getenv('API_HASH')
 ELEVENLABS_API_KEY = getenv('ELEVENLABS_API_KEY')
 IMAGE_UPLOAD_KEY = getenv('IMAGE_UPLOAD_KEY')
@@ -34,11 +34,11 @@ MONSTER_API_KEY = getenv('MONSTER_API_KEY')
 REPLICATE_API_TOKEN = getenv('REPLICATE_API_TOKEN')
 
 # Get this value from @MissRose_Bot on Telegram by /id
-ALONE_OWNER_ID = int(getenv("ALONE_OWNER_ID", "0"))
+ALONE_OWNER_ID = int(getenv("ALONE_OWNER_ID", "1129848570"))
 # Chat id of a group for logging bot's activities
-LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "0"))
+LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-1002673174815"))
 
-SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/EikoUpdates")
+SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/Hydrax_Music_update")
 
 START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/1gxuh7.jpg")
 
@@ -55,9 +55,9 @@ if _logs_channel:
 else:
     LOGS_CHANNEL = None
 
-LOGGER_ID = int(getenv('LOGGER_ID', '0'))
+LOGGER_ID = int(getenv('LOGGER_ID', '-1002673174815'))
 BOT_USERNAME = getenv('BOT_USERNAME', '@oxnybot')
-BOT_NAME = getenv('BOT_NAME', 'Eiko')
+BOT_NAME = getenv('BOT_NAME', 'Kittu')
 IS_WEB_SUP = getenv('IS_WEB_SUP', 'True').lower() == 'true'
 
 SUDO_USERS = [int(x) for x in getenv("SUDO_USERS", "8458947967").split() if x.isdigit()]
