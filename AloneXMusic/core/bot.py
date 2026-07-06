@@ -1,55 +1,44 @@
-# Copyright (c) 2025 TheHamkerAlone 
-# Licensed under the MIT License.
-# This file is part of AloneXMusic
-
-
+import asyncio
 import pyrogram
 
+from AloneX import pbot
 from AloneXMusic import config, logger
 
 
-class Bot(pyrogram.Client):
-    def __init__(self):
-        super().__init__(
-            name="AloneX",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            bot_token=config.BOT_TOKEN,
-            parse_mode=pyrogram.enums.ParseMode.HTML,
-            max_concurrent_transmissions=7,
-            link_preview_options=pyrogram.types.LinkPreviewOptions(is_disabled=True),
-        )
-        self.owner = config.OWNER_ID
-        self.logger = config.LOGGER_ID
-        self.bl_users = pyrogram.filters.user()
-        self.sudoers = pyrogram.filters.user(self.owner)
+class Bot:
+    def __new__(cls):
+        pbot.owner = config.OWNER_ID
+        pbot.logger = config.LOGGER_ID
+        pbot.bl_users = pyrogram.filters.user()
+        pbot.sudoers = pyrogram.filters.user(config.OWNER_ID)
 
-    async def boot(self):
-        """
-        Starts the bot and performs initial setup.
+        async def boot():
+            for _ in range(30):
+                if getattr(pbot, "me", None):
+                    break
+                await asyncio.sleep(1)
 
-        Raises:
-            SystemExit: If the bot fails to access the log group or is not an administrator in the logger group.
-        """
-        await super().start()
-        self.id = self.me.id
-        self.name = self.me.first_name
-        self.username = self.me.username
-        self.mention = self.me.mention
+            pbot.id = pbot.me.id
+            pbot.name = pbot.me.first_name
+            pbot.username = pbot.me.username
+            pbot.mention = pbot.me.mention
 
-        try:
-            await self.send_message(self.logger, "Bot Started")
-            get = await self.get_chat_member(self.logger, self.id)
-        except Exception as ex:
-            raise SystemExit(f"Bot has failed to access the log group: {self.logger}\nReason: {ex}")
+            try:
+                await pbot.send_message(config.LOGGER_ID, "Music Bot Started")
+                get = await pbot.get_chat_member(config.LOGGER_ID, pbot.id)
+            except Exception as ex:
+                raise SystemExit(
+                    f"Bot has failed to access the log group: {config.LOGGER_ID}\nReason: {ex}"
+                )
 
-        if get.status != pyrogram.enums.ChatMemberStatus.ADMINISTRATOR:
-            raise SystemExit("Please promote the bot as an admin in logger group.")
-        logger.info(f"Bot started as @{self.username}")
+            if get.status != pyrogram.enums.ChatMemberStatus.ADMINISTRATOR:
+                raise SystemExit("Please promote the bot as an admin in logger group.")
 
-    async def exit(self):
-        """
-        Asynchronously stops the bot.
-        """
-        await super().stop()
-        logger.info("Bot stopped.")
+            logger.info(f"Music handlers attached to @{pbot.username}")
+
+        async def exit():
+            logger.info("Music bot bridge stopped.")
+
+        pbot.boot = boot
+        pbot.exit = exit
+        return pbot
