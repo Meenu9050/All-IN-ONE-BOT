@@ -7,6 +7,7 @@ from pathlib import Path
 
 from pyrogram import filters, types
 
+from AloneX import prefix_cmds
 from AloneXMusic import anon, app, config, db, lang, queue, tg, yt
 from AloneXMusic.helpers import buttons, utils
 from AloneXMusic.helpers._play import checkUB
@@ -20,8 +21,9 @@ def playlist_to_queue(chat_id: int, tracks: list) -> str:
     text = text[:1948] + "</blockquote>"
     return text
 
+
 @app.on_message(
-    filters.command(["play", "playforce", "vplay", "vplayforce"])
+    filters.command(["play", "playforce", "vplay", "vplayforce"], prefixes=prefix_cmds)
     & filters.group
     & ~app.bl_users
 )
@@ -44,9 +46,7 @@ async def play_hndlr(
     if url:
         if "playlist" in url:
             await sent.edit_text(m.lang["playlist_fetch"])
-            tracks = await yt.playlist(
-                config.PLAYLIST_LIMIT, mention, url, video
-            )
+            tracks = await yt.playlist(config.PLAYLIST_LIMIT, mention, url, video)
 
             if not tracks:
                 return await sent.edit_text(m.lang["playlist_error"])
@@ -121,8 +121,10 @@ async def play_hndlr(
             file.file_path = await yt.download(file.id, video=video)
 
     await anon.play_media(chat_id=m.chat.id, message=sent, media=file)
+
     if not tracks:
         return
+
     added = playlist_to_queue(m.chat.id, tracks)
     await app.send_message(
         chat_id=m.chat.id,
