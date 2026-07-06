@@ -28,3 +28,7 @@ moviepy
 g4f
 python-dotenv
 PyGithub
+py-yt-search~=0.5.7
+pymongo>=4.16.0
+pytgcrypto>=1.2.11
+static-ffmpeg

@@ -66,6 +66,36 @@
       "description": "Sudo users ID separated by space",
       "required": false,
       "value": "SUDO USER ID"
+    },
+    "USER_STRING": {
+      "description": "Pyrogram string session for music assistant. SESSION is also supported.",
+      "required": true,
+      "value": "PYROGRAM STRING SESSION"
+    },
+    "MUSIC_ENABLED": {
+      "description": "Set False to disable music modules temporarily.",
+      "required": false,
+      "value": "True"
+    },
+    "SESSION2": {
+      "description": "Optional second assistant string session for music.",
+      "required": false,
+      "value": ""
+    },
+    "SESSION3": {
+      "description": "Optional third assistant string session for music.",
+      "required": false,
+      "value": ""
+    },
+    "YOUTUBE_API_KEY": {
+      "description": "Optional YouTube API key for music search.",
+      "required": false,
+      "value": ""
+    },
+    "COOKIES_URL": {
+      "description": "Optional batbin.me cookies URL for YouTube downloads.",
+      "required": false,
+      "value": ""
     }
     },
   "buildpacks": [
